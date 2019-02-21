@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.item_home.view.*
 import qzl.com.qgmusickotlin.R
 
 /**
- * @desc
+ * @desc 首页条目view
  * @author Qzl
  * @email 2538096489@qq.com
  * @time 2019-02-01 17:03
