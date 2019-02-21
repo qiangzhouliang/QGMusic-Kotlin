@@ -17,8 +17,11 @@ import qzl.com.qgmusickotlin.view.HomeView
  * Description:
  */
 class HomeFragment : BaseFragment(), HomeView {
-    //适配
+    //适配器懒加载初始化
     val adapter by lazy { HomeAdapter()}
+    /**
+     * 数据操作层懒加载初始化
+     */
     val presenter by lazy { HomePresenterImpl(this) }
     override fun initView(): View? {
         return View.inflate(context, R.layout.fragment_home,null)
