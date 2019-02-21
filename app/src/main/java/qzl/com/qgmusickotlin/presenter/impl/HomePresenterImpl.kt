@@ -1,93 +1,50 @@
 package qzl.com.qgmusickotlin.presenter.impl
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.itheima.player.model.bean.HomeItemBean
-import okhttp3.*
+import qzl.com.qgmusickotlin.net.HomeRequest
+import qzl.com.qgmusickotlin.net.ResponseHandler
 import qzl.com.qgmusickotlin.presenter.interf.HomePresenter
-import qzl.com.qgmusickotlin.util.ThreadUtil
-import qzl.com.qgmusickotlin.util.URLProviderUtils
+import qzl.com.qgmusickotlin.presenter.interf.HomePresenter.Companion.TYPE_INIT_OR_REFRESH
+import qzl.com.qgmusickotlin.presenter.interf.HomePresenter.Companion.TYPE_LOAD_MORE
 import qzl.com.qgmusickotlin.view.HomeView
-import java.io.IOException
 
 /**
- * @desc
+ * @desc 首页业务逻辑处理类
  * @author Qzl
  * @email 2538096489@qq.com
  * @time 2019-02-21 13:51
  * @class QGMusicKotlin
  * @package qzl.com.qgmusickotlin.presenter.impl
  */
-class HomePresenterImpl(var homeView: HomeView) :HomePresenter{
+class HomePresenterImpl(var homeView: HomeView) :HomePresenter, ResponseHandler<List<HomeItemBean>> {
     /**
      * 初始化数据或刷新数据
      */
     override fun loadDatas() {
-        val path = URLProviderUtils.getHomeUrl(0,20)
-        val client = OkHttpClient()
-        val request = Request.Builder().url(path).get().build()
-        client.newCall(request).enqueue(object : Callback {
-            /**
-             * 在子线程中调运的
-             */
-            override fun onFailure(call: Call, e: IOException) {
-                ThreadUtil.runOnMainThread(object :Runnable{
-                    override fun run() {
-                        //回调到view层进行处理
-                        homeView.onError(e.message)
-                    }
-                })
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                val result = response.body()?.string()
-                val gson = Gson()
-                val list = gson.fromJson<List<HomeItemBean>>(result, object : TypeToken<List<HomeItemBean>>() {}.type)
-                println("获取数据成功 "+list.size)
-                //刷新列表
-                ThreadUtil.runOnMainThread(object :Runnable{
-                    override fun run() {
-                        //将结果回调到view层
-                        homeView.loadSuccess(list)
-                    }
-                })
-            }
-        })
+        //1定义一个request+执行
+        HomeRequest(TYPE_INIT_OR_REFRESH,0,this).execute()
     }
 
     override fun loadMore(offset: Int) {
-        val path = URLProviderUtils.getHomeUrl(offset,20)
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(path)
-            .get()
-            .build()
-        client.newCall(request).enqueue(object :Callback{
-            /**
-             * 在子线程中调运的
-             */
-            override fun onFailure(call: Call, e: IOException) {
-                ThreadUtil.runOnMainThread(object :Runnable{
-                    override fun run() {
-                        //回调到view层进行处理
-                        homeView.onError(e.message)
-                    }
-                })
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                val result = response.body()?.string()
-                val gson = Gson()
-                val list = gson.fromJson<List<HomeItemBean>>(result, object : TypeToken<List<HomeItemBean>>() {}.type)
-                //刷新列表
-                ThreadUtil.runOnMainThread(object :Runnable{
-                    override fun run() {
-                        //将结果回调到view层
-                        homeView.loadMoreSuccess(list)
-                    }
-                })
-            }
-        })
+        //1定义一个request
+        HomeRequest(TYPE_LOAD_MORE,offset,this).execute()
     }
 
+    /**
+     * 加载数据失败
+     */
+    override fun onError(type:Int,msg: String?) {
+        homeView.onError(msg)
+    }
+    /**
+     * 加载数据成功
+     */
+    override fun OnSuccess(type:Int,result: List<HomeItemBean>) {
+        //区分 初始化数据和加载更多数据
+        when(type){
+            TYPE_INIT_OR_REFRESH -> homeView.loadSuccess(result)
+            TYPE_LOAD_MORE -> homeView.loadMoreSuccess(result)
+        }
+
+    }
 }
