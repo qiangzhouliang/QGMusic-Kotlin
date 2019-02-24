@@ -68,5 +68,8 @@ dependencies {
     implementation 'com.dou361.ijkplayer:jjdxm-ijkplayer:1.0.2'
     //jiecaovideoplayer
     implementation 'fm.jiecao:jiecaovideoplayer:5.8.1'
-//    implementation 'cn.jzvd:jiaozivideoplayer:6.4.1'
+    //    implementation 'cn.jzvd:jiaozivideoplayer:6.4.1'
+    //permissiongen
+    implementation 'com.lovedise:permissiongen:0.0.6'
+    implementation files('libs/eventbus.jar')
 }

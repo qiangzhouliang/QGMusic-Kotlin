@@ -3,6 +3,7 @@
           package="qzl.com.qgmusickotlin">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <application
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
@@ -53,6 +54,9 @@
                 <data android:mimeType="video/3gpp2"/>
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.AudioPlayerActivity"
+        android:launchMode="singleTask"/>
+        <service android:name="com.itheima.player.service.AudioService"/>
     </application>
 
 </manifest>
