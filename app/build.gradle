@@ -21,6 +21,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'x86_64', 'armeabi-v7a', 'armeabi'
+            universalApk false
+        }
+    }
 }
 // 强制让所有模块都用相同的支持库版本。
 
@@ -52,4 +60,13 @@ dependencies {
     //okhttp3
     implementation 'com.squareup.okhttp3:okhttp:3.8.1'
     implementation 'com.google.code.gson:gson:2.8.5'
+    //picasso-transformations
+    implementation 'jp.wasabeef:picasso-transformations:2.2.1'
+    // If you want to use the GPU Filters
+    implementation 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
+    implementation project(':vitamio_lib')
+    implementation 'com.dou361.ijkplayer:jjdxm-ijkplayer:1.0.2'
+    //jiecaovideoplayer
+    implementation 'fm.jiecao:jiecaovideoplayer:5.8.1'
+//    implementation 'cn.jzvd:jiaozivideoplayer:6.4.1'
 }

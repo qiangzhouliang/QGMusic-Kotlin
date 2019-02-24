@@ -1,23 +1,32 @@
 package qzl.com.qgmusickotlin.ui.fragment
 
-import android.graphics.Color
-import android.view.Gravity
-import android.view.View
-import android.widget.TextView
-import org.jetbrains.anko.textColor
-import qzl.com.qgmusickotlin.base.BaseFragment
+import com.itheima.player.model.bean.YueDanBean
+import qzl.com.qgmusickotlin.adapter.YueDanAdapter
+import qzl.com.qgmusickotlin.base.BasListAdapter
+import qzl.com.qgmusickotlin.base.BasListFragment
+import qzl.com.qgmusickotlin.base.BasListPresenter
+import qzl.com.qgmusickotlin.presenter.impl.YueDanPresentImpl
+import qzl.com.qgmusickotlin.widget.YueDanItemView
 
 /**
  * ClassName:HomeFragment
- * Description:
+ * Description: 悦单界面
  */
-class YueDanFragment : BaseFragment() {
-    override fun initView(): View? {
-        var tv = TextView(context)
-        tv.gravity = Gravity.CENTER
-        tv.textColor = Color.RED
-        tv.text = javaClass.simpleName
-        return tv
+class YueDanFragment : BasListFragment<YueDanBean,YueDanBean.PlayListsBean,YueDanItemView>(){
+    override fun getSpecAdapter(): BasListAdapter<YueDanBean.PlayListsBean, YueDanItemView> {
+        return YueDanAdapter()
     }
 
+    override fun getSpecPresenter(): BasListPresenter {
+        return YueDanPresentImpl(this)
+    }
+
+    override fun getList(response: YueDanBean?): List<YueDanBean.PlayListsBean>? {
+        return response?.playLists
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        //解绑view
+        presenter.destroyView()
+    }
 }

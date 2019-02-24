@@ -1,12 +1,12 @@
 package qzl.com.qgmusickotlin.presenter.impl
 
 import com.itheima.player.model.bean.HomeItemBean
+import qzl.com.qgmusickotlin.base.BasListPresenter.Companion.TYPE_INIT_OR_REFRESH
+import qzl.com.qgmusickotlin.base.BasListPresenter.Companion.TYPE_LOAD_MORE
+import qzl.com.qgmusickotlin.base.BaseView
 import qzl.com.qgmusickotlin.net.HomeRequest
 import qzl.com.qgmusickotlin.net.ResponseHandler
 import qzl.com.qgmusickotlin.presenter.interf.HomePresenter
-import qzl.com.qgmusickotlin.presenter.interf.HomePresenter.Companion.TYPE_INIT_OR_REFRESH
-import qzl.com.qgmusickotlin.presenter.interf.HomePresenter.Companion.TYPE_LOAD_MORE
-import qzl.com.qgmusickotlin.view.HomeView
 
 /**
  * @desc 首页业务逻辑处理类
@@ -16,7 +16,15 @@ import qzl.com.qgmusickotlin.view.HomeView
  * @class QGMusicKotlin
  * @package qzl.com.qgmusickotlin.presenter.impl
  */
-class HomePresenterImpl(var homeView: HomeView) :HomePresenter, ResponseHandler<List<HomeItemBean>> {
+class HomePresenterImpl(var homeView: BaseView<List<HomeItemBean>>?) :HomePresenter, ResponseHandler<List<HomeItemBean>> {
+    /**
+     * 解绑view和presenter
+     */
+    override fun destroyView(){
+        homeView.let {
+            homeView = null
+        }
+    }
     /**
      * 初始化数据或刷新数据
      */
@@ -34,7 +42,7 @@ class HomePresenterImpl(var homeView: HomeView) :HomePresenter, ResponseHandler<
      * 加载数据失败
      */
     override fun onError(type:Int,msg: String?) {
-        homeView.onError(msg)
+        homeView?.onError(msg)
     }
     /**
      * 加载数据成功
@@ -42,8 +50,8 @@ class HomePresenterImpl(var homeView: HomeView) :HomePresenter, ResponseHandler<
     override fun OnSuccess(type:Int,result: List<HomeItemBean>) {
         //区分 初始化数据和加载更多数据
         when(type){
-            TYPE_INIT_OR_REFRESH -> homeView.loadSuccess(result)
-            TYPE_LOAD_MORE -> homeView.loadMoreSuccess(result)
+            TYPE_INIT_OR_REFRESH -> homeView?.loadSuccess(result)
+            TYPE_LOAD_MORE -> homeView?.loadMoreSuccess(result)
         }
 
     }

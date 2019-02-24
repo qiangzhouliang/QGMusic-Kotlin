@@ -1,5 +1,7 @@
 package qzl.com.qgmusickotlin.presenter.interf
 
+import qzl.com.qgmusickotlin.base.BasListPresenter
+
 /**
  * @desc
  * @author Qzl
@@ -8,27 +10,5 @@ package qzl.com.qgmusickotlin.presenter.interf
  * @class QGMusicKotlin
  * @package qzl.com.qgmusickotlin.presenter.interf
  */
-interface HomePresenter {
-    /**
-     * 在伴生对象中定义常量
-     */
-    companion object {
-        /**
-         * 初始化类型
-         */
-        val TYPE_INIT_OR_REFRESH = 1
-        /**
-         * 加载更多类型
-         */
-        val TYPE_LOAD_MORE = 2
-    }
-    /**
-     * 加载数据
-     */
-    fun loadDatas()
-
-    /**
-     * 加载更多数据
-     */
-    fun loadMore(offset: Int)
+interface HomePresenter :BasListPresenter{
 }

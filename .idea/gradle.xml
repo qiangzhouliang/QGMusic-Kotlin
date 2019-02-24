@@ -9,6 +9,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/netvideosender_app" />
+            <option value="$PROJECT_DIR$/vitamio_lib" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
